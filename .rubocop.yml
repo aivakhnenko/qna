@@ -1,0 +1,7 @@
+AllCops:
+  Exclude:
+    - app/**/*
+    - bin/**/*
+    - config/**/*
+    - spec/**/*
+    - db/**/*
