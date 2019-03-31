@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: :show
   before_action :find_question, only: %i[new create]
 
   def new
