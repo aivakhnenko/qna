@@ -61,7 +61,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:answer) { create(:answer, question: question) }
+    let(:answer) { create(:answer, question: question, user: user) }
     
     before { get :show, params: { question_id: question.id, id: answer } }
 
@@ -71,6 +71,40 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'renders show view' do
       expect(response).to render_template(:show)
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:users) { create_list(:user, 2) }
+
+    let!(:question) { create(:question, user: users[0]) }
+    let!(:answer) { create(:answer, question: question, user: users[0]) }
+    let!(:count) { Answer.count }
+
+    context 'user is answer author' do
+      before { login(users[0]) }
+      before { delete :destroy, params: { question_id: question.id, id: answer } }
+
+      it 'deletes the answer' do
+        expect(Answer.count).to eq count - 1
+      end
+
+      it 'redirect_to question page' do
+        expect(response).to redirect_to question_path(question)
+      end
+    end
+
+    context 'user is not answer author' do
+      before { login(users[1]) }
+      before { delete :destroy, params: { question_id: question.id, id: answer } }
+
+      it 'does not delete the answer' do
+        expect(Answer.count).to eq count
+      end
+
+      it 'redirect_to question page' do
+        expect(response).to redirect_to question_path(question)
+      end
     end
   end
 end

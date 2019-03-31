@@ -2,6 +2,8 @@ h1= @question.title
 p= @question.body
 - @question.answers.each do |answer|
   p= answer.body
+  - if answer.user == current_user
+    p= link_to 'Delete answer', question_answer_path(@question, answer), method: :delete
 - if @question.user == current_user
   p= link_to 'Delete question', question_path(@question), method: :delete
 p= link_to 'Post answer', new_question_answer_path(@question)
