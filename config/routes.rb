@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   
   root to: "questions#index"
 
-  resources :questions, only: %i[index show new create] do
+  resources :questions, only: %i[index show new create destroy] do
     resources :answers, only: %i[show new create]
   end
 end

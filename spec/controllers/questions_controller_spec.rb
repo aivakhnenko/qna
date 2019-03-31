@@ -4,7 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 3) }
+    let(:questions) { create_list(:question, 3, user: user) }
 
     before { get :index }
 
@@ -66,7 +66,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:question) { create(:question) }
+    let(:question) { create(:question, user: user) }
     
     before { get :show, params: { id: question } }
 
@@ -76,6 +76,39 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'renders show view' do
       expect(response).to render_template(:show)
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:users) { create_list(:user, 2) }
+
+    let!(:question) { create(:question, user: users[0]) }
+    let!(:count) { Question.count }
+
+    context 'user is question author' do
+      before { login(users[0]) }
+      before { delete :destroy, params: { id: question } }
+
+      it 'deletes the question' do
+        expect(Question.count).to eq count - 1
+      end
+
+      it 'redirect_to index page' do
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'user is not question author' do
+      before { login(users[1]) }
+      before { delete :destroy, params: { id: question } }
+
+      it 'does not delete the question' do
+        expect(Question.count).to eq count
+      end
+
+      it 'redirect_to show page' do
+        expect(response).to redirect_to question_path(question)
+      end
     end
   end
 end

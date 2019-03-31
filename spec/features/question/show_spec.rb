@@ -6,8 +6,10 @@ feature 'User can see list of all answers for question', %q{
   I'd like to be able to see list of all answers for question
 } do
 
+  given(:user) { create(:user) }
+
   scenario 'User views list of all answers for question' do
-    question = create(:question)
+    question = create(:question, user: user)
     answers = create_list(:answer, 3, :list, question: question)
 
     visit question_path(question)
