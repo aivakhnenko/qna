@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:user) { create(:user) }
+
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
 
@@ -16,6 +18,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -28,6 +32,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     let!(:count) { Question.count }
 
     context 'valid attributes' do
