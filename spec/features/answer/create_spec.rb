@@ -14,21 +14,20 @@ feature 'User can post answer', %q{
       sign_in(user)
 
       visit question_path(question)
-      click_on 'Post answer'
     end
 
     scenario 'posts an answer' do
-      fill_in 'Body', with: 'answer answer answer'
-      click_on 'Post'
+      fill_in 'Your answer:', with: 'answer answer answer'
+      click_on 'Post answer'
 
       expect(page).to have_content 'Your answer successfully created.'
       expect(page).to have_content 'answer answer answer'
     end
 
     scenario 'tries to post an answer with errors' do
-      click_on 'Post'
+      click_on 'Post answer'
 
-      expect(page).to have_content "Body can't be blank"
+      expect(page).to have_content "Answer can't be blank"
     end
   end
 

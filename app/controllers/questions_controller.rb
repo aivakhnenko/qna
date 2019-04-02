@@ -19,7 +19,9 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    @answer = @question.answers.new
+  end
 
   def destroy
     if @question.user == current_user
