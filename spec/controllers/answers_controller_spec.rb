@@ -4,24 +4,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
 
-  describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new, params: { question_id: question.id } }
-
-    it 'assigns new Answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'relates @answer to question from params' do
-      expect(assigns(:answer).question).to eq question
-    end
-
-    it 'renders new view' do
-      expect(response).to render_template(:new)
-    end
-  end
-
   describe 'POST #create' do
     before { login(user) }
 
@@ -42,8 +24,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(Answer.last.question).to eq question
       end
 
-      it 'redirects to show view for newly created answer' do
-        expect(response).to redirect_to([question, assigns(:answer)])
+      it 'redirects to question show' do
+        expect(response).to redirect_to(question)
       end
     end
 
@@ -54,23 +36,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(Answer.count).to eq count
       end
 
-      it 're-render new view' do
-        expect(response).to render_template(:new)
+      it 're-render question show view' do
+        expect(response).to render_template('questions/show')
       end
-    end
-  end
-
-  describe 'GET #show' do
-    let(:answer) { create(:answer, question: question, user: user) }
-    
-    before { get :show, params: { question_id: question.id, id: answer } }
-
-    it 'assigns the requested answer to @answer' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'renders show view' do
-      expect(response).to render_template(:show)
     end
   end
 
