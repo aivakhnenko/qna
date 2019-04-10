@@ -7,13 +7,11 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     before { login(user) }
 
-    let!(:count) { Answer.count }
-
     context 'valid attributes' do
       before { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }
 
       it 'saves a new Answer in the database' do
-        expect(Answer.count).to eq count + 1
+        expect { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
       end
 
       it 'saves answer with attributes from params in the database' do
@@ -24,19 +22,23 @@ RSpec.describe AnswersController, type: :controller do
         expect(Answer.last.question).to eq question
       end
 
+      it 'relates saved answer to user' do
+        expect(Answer.last.user).to eq subject.current_user
+      end
+
       it 'redirects to question show' do
         expect(response).to redirect_to(question)
       end
     end
 
     context 'invalid attributes' do
-      before { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }
-
       it 'does not save a new Answer in the database' do
-        expect(Answer.count).to eq count
+        expect { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }.to change(Answer, :count).by(0)
       end
 
       it 're-render question show view' do
+        post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) }
+
         expect(response).to render_template('questions/show')
       end
     end
@@ -47,30 +49,31 @@ RSpec.describe AnswersController, type: :controller do
 
     let!(:question) { create(:question, user: users[0]) }
     let!(:answer) { create(:answer, question: question, user: users[0]) }
-    let!(:count) { Answer.count }
 
     context 'user is answer author' do
       before { login(users[0]) }
-      before { delete :destroy, params: { question_id: question.id, id: answer } }
 
       it 'deletes the answer' do
-        expect(Answer.count).to eq count - 1
+        expect { delete :destroy, params: { question_id: question.id, id: answer } }.to change(Answer, :count).by(-1)
       end
 
       it 'redirect_to question page' do
+        delete :destroy, params: { question_id: question.id, id: answer }
+
         expect(response).to redirect_to question_path(question)
       end
     end
 
     context 'user is not answer author' do
       before { login(users[1]) }
-      before { delete :destroy, params: { question_id: question.id, id: answer } }
 
       it 'does not delete the answer' do
-        expect(Answer.count).to eq count
+        expect { delete :destroy, params: { question_id: question.id, id: answer } }.to change(Answer, :count).by(0)
       end
 
       it 'redirect_to question page' do
+        delete :destroy, params: { question_id: question.id, id: answer }
+
         expect(response).to redirect_to question_path(question)
       end
     end

@@ -4,8 +4,8 @@ FactoryBot.define do
   end
 
   factory :question do
-    title { "MyString" }
-    body { "MyText" }
+    title { "QuestionTitle" }
+    body { "QuestionBody" }
 
     trait :list do
       title

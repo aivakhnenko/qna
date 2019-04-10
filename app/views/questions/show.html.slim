@@ -4,9 +4,9 @@ h1= @question.title
 p= @question.body
 - (@question.answers - [@answer]).each do |answer|
   p= answer.body
-  - if answer.user == current_user
+  - if current_user&.author_of?(answer)
     p= link_to 'Delete answer', question_answer_path(@question, answer), method: :delete
-- if @question.user == current_user
+- if current_user&.author_of?(@question)
   p= link_to 'Delete question', question_path(@question), method: :delete
 
 = form_with model: [@question, @answer], local: true do |f|
