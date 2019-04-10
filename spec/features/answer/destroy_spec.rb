@@ -18,6 +18,8 @@ feature 'User can delete his answer', %q{
     click_on 'Delete answer'
 
     expect(page).to have_content 'Your answer successfully deleted.'
+
+    expect(page).to have_no_content answer.body
   end
 
   scenario "User tries to delete other user's answer" do
@@ -25,6 +27,12 @@ feature 'User can delete his answer', %q{
 
     visit question_path(question)
 
-    expect(page).to have_no_content 'Delete answer'
+    expect(page).to have_no_link 'Delete answer'
+  end
+
+  scenario "Unauthenticated user tries to delete other user's answer" do
+    visit question_path(question)
+
+    expect(page).to have_no_link 'Delete answer'
   end
 end

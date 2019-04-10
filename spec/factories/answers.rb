@@ -4,7 +4,7 @@ FactoryBot.define do
   end
 
   factory :answer do
-    body { "MyText" }
+    body { "AnswerBody" }
 
     trait :list do
       body
