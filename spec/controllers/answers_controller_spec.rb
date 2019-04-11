@@ -15,15 +15,15 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'saves answer with attributes from params in the database' do
-        expect(attributes_for(:answer).to_a - Answer.last.attributes.symbolize_keys.to_a).to be_empty
+        expect(attributes_for(:answer).to_a - assigns(:answer).attributes.symbolize_keys.to_a).to be_empty
       end
 
       it 'relates saved answer to question from params' do
-        expect(Answer.last.question).to eq question
+        expect(assigns(:answer).question).to eq question
       end
 
       it 'relates saved answer to user' do
-        expect(Answer.last.user).to eq subject.current_user
+        expect(assigns(:answer).user).to eq subject.current_user
       end
 
       it 'redirects to question show' do
@@ -33,7 +33,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'invalid attributes' do
       it 'does not save a new Answer in the database' do
-        expect { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }.to change(Answer, :count).by(0)
+        expect { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }.not_to change(Answer, :count)
       end
 
       it 're-render question show view' do
@@ -68,7 +68,7 @@ RSpec.describe AnswersController, type: :controller do
       before { login(users[1]) }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { question_id: question.id, id: answer } }.to change(Answer, :count).by(0)
+        expect { delete :destroy, params: { question_id: question.id, id: answer } }.not_to change(Answer, :count)
       end
 
       it 'redirect_to question page' do

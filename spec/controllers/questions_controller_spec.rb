@@ -42,7 +42,11 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'saves question with attributes from params in the database' do
-        expect(attributes_for(:question).to_a - Question.last.attributes.symbolize_keys.to_a).to be_empty
+        expect(attributes_for(:question).to_a - assigns(:question).attributes.symbolize_keys.to_a).to be_empty
+      end
+
+      it 'relates saved question to user' do
+        expect(assigns(:question).user).to eq subject.current_user
       end
 
       it 'redirects to show view for newly created question' do
@@ -54,7 +58,7 @@ RSpec.describe QuestionsController, type: :controller do
       before { post :create, params: { question: attributes_for(:question, :invalid) } }
 
       it 'does not save a new Question in the database' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to change(Question, :count).by(0)
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.not_to change(Question, :count)
       end
 
       it 're-render new view' do
@@ -102,7 +106,7 @@ RSpec.describe QuestionsController, type: :controller do
       before { login(users[1]) }
 
       it 'does not delete the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
+        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
       end
 
       it 'redirect_to show page' do

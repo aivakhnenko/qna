@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: :show
-  before_action :find_question, only: %i[create destroy]
+  before_action :authenticate_user!
+  before_action :find_question, only: :create
   before_action :find_answer, only: :destroy
 
   def create
@@ -15,9 +15,9 @@ class AnswersController < ApplicationController
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
-      redirect_to @question, notice: 'Your answer successfully deleted.'
+      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     else
-      redirect_to @question, error: 'Only author can delete this question'
+      redirect_to @answer.question, error: 'Only author can delete this question'
     end
   end
 
