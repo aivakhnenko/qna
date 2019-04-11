@@ -9,32 +9,19 @@ RSpec.describe User, type: :model do
 
   describe '#author_of?' do
     let(:users) { create_list(:user, 2) }
-    let(:question) { create(:question, user: users[0]) }
-    let(:answer) { create(:answer, question: question, user: users[0]) }
+    let(:resource) { create(:question, user: users[0]) }
 
     context 'user' do
-      context 'is an author' do
+      context 'is an author ot the resource' do
         let(:user) { users[0] }
 
-        context 'of the question' do
-          it { expect(user.author_of?(question)).to be_truthy }
-        end
-
-        context 'of the answer' do
-          it { expect(user.author_of?(answer)).to be_truthy }
-        end
+        it { expect(user).to be_author_of(resource) }
       end
 
-      context 'is not an author' do
+      context 'is not an author of the resource' do
         let(:user) { users[1] }
 
-        context 'of the question' do
-          it { expect(user.author_of?(question)).to be_falsey }
-        end
-
-        context 'of the answer' do
-          it { expect(user.author_of?(answer)).to be_falsey }
-        end
+        it { expect(user).not_to be_author_of(resource) }
       end
     end
   end

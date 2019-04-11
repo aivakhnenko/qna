@@ -2,10 +2,11 @@
 
 h1= @question.title
 p= @question.body
-- (@question.answers - [@answer]).each do |answer|
-  p= answer.body
-  - if current_user&.author_of?(answer)
-    p= link_to 'Delete answer', question_answer_path(@question, answer), method: :delete
+- @question.answers.each do |answer|
+  - if answer.persisted?
+    p= answer.body
+    - if current_user&.author_of?(answer)
+      p= link_to 'Delete answer', answer_path(answer), method: :delete
 - if current_user&.author_of?(@question)
   p= link_to 'Delete question', question_path(@question), method: :delete
 
