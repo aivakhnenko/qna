@@ -5,7 +5,7 @@ feature 'User can post answer', %q{
   As a user
   I'd like to be able to post the answer
 } do
-
+  
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
@@ -16,7 +16,7 @@ feature 'User can post answer', %q{
       visit question_path(question)
     end
 
-    scenario 'posts an answer' do
+    scenario 'posts an answer', js: true do
       fill_in 'Your answer:', with: 'answer answer answer'
       click_on 'Post answer'
 
@@ -24,7 +24,7 @@ feature 'User can post answer', %q{
       expect(page).to have_content 'answer answer answer'
     end
 
-    scenario 'tries to post an answer with errors' do
+    scenario 'tries to post an answer with errors', js: true do
       click_on 'Post answer'
 
       expect(page).to have_content "Answer can't be blank"

@@ -1,15 +1,16 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: :create
-  before_action :find_answer, only: :destroy
+  before_action :find_answer, only: %i[update destroy]
 
   def create
     @answer = @question.answers.new(answer_params.merge(user: current_user))
-    if @answer.save
-      redirect_to @question, notice: 'Your answer successfully created.'
-    else
-      render 'questions/show'
-    end
+    flash.now[:notice] = 'Your answer successfully created.' if @answer.save
+  end
+
+  def update
+    @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def destroy
