@@ -6,7 +6,7 @@
 .answer-errors
   = render 'errors', resource: @answer
 .answers
-  = render @question.answers
+  = render @question.answers_best_first
 
 - if current_user
   = form_with model: [@question, @answer], class: 'new-answer', remote: true do |f|

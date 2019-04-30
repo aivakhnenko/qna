@@ -49,14 +49,16 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'valid attributes' do
-      before { post :create, params: { question: attributes_for(:question) } }
+      let(:question_attributes) { attributes_for(:question) }
+
+      before { post :create, params: { question: question_attributes } }
 
       it 'saves a new Question in the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+        expect { post :create, params: { question: question_attributes } }.to change(Question, :count).by(1)
       end
 
       it 'saves question with attributes from params in the database' do
-        expect(attributes_for(:question).to_a - assigns(:question).attributes.symbolize_keys.to_a).to be_empty
+        expect(question_attributes.to_a - assigns(:question).attributes.symbolize_keys.to_a).to be_empty
       end
 
       it 'relates saved question to user' do
