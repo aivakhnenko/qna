@@ -7,7 +7,7 @@ feature 'User can post answer', %q{
 } do
   
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given!(:question) { create(:question, user: user) }
 
   describe 'Authenticated user' do
     background do
@@ -31,10 +31,9 @@ feature 'User can post answer', %q{
     end
   end
 
-  scenario 'Unauthenticated user tries post an answer' do
+  scenario 'Unauthenticated user can not post an answer', js: true do
     visit question_path(question)
-    click_on 'Post answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_link 'Post answer'
   end
 end

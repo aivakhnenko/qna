@@ -17,6 +17,20 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    let(:question) { create(:question, user: user) }
+    
+    before { get :show, params: { id: question } }
+
+    it 'assigns the requested question to @question' do
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'renders show view' do
+      expect(response).to render_template(:show)
+    end
+  end
+
   describe 'GET #new' do
     before { login(user) }
 
@@ -69,17 +83,57 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
-    let(:question) { create(:question, user: user) }
-    
-    before { get :show, params: { id: question } }
+  describe 'PATCH #update' do
+    let(:users) { create_list(:user, 2) }
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
+    let!(:question) { create(:question, user: users[0]) }
+
+    context 'user is question author' do
+      before { login(users[0]) }
+
+      context 'with valid attributes' do
+        it 'changes question attributes' do
+          patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+          question.reload
+          expect(question.body).to eq 'new body'
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'does not change question attributes' do
+          expect do
+            patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          end.to_not change(question, :body)
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
     end
 
-    it 'renders show view' do
-      expect(response).to render_template(:show)
+    context 'user is not question author' do
+      before { login(users[1]) }
+      let!(:body) { question.body }
+
+      it 'does not update the question' do
+        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+        question.reload
+
+        expect(question.body).to eq body
+      end
+
+      it 'redirect_to question page' do
+        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+
+        expect(response).to redirect_to question_path(question)
+      end
     end
   end
 
