@@ -1,5 +1,5 @@
 $('.answer-errors').html('<%= render 'errors', resource: @answer %>');
 
 <% unless @answer.errors.present? %>
-  $('.answers').html('<%= j render @question.answers %>');
+  $('.answers').html('<%= j render @question.answers_best_first %>');
 <% end %>

@@ -8,14 +8,16 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
 
     context 'valid attributes' do
-      before { post :create, params: { question_id: question.id, answer: attributes_for(:answer) }, format: :js }
+      let(:answer_attributes) { attributes_for(:answer) }
+
+      before { post :create, params: { question_id: question.id, answer: answer_attributes }, format: :js }
 
       it 'saves a new Answer in the database' do
-        expect { post :create, params: { question_id: question.id, answer: attributes_for(:answer) }, format: :js }.to change(Answer, :count).by(1)
+        expect { post :create, params: { question_id: question.id, answer: answer_attributes }, format: :js }.to change(Answer, :count).by(1)
       end
 
       it 'saves answer with attributes from params in the database' do
-        expect(attributes_for(:answer).to_a - assigns(:answer).attributes.symbolize_keys.to_a).to be_empty
+        expect(answer_attributes.to_a - assigns(:answer).attributes.symbolize_keys.to_a).to be_empty
       end
 
       it 'relates saved answer to question from params' do
@@ -129,6 +131,53 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirect_to question page' do
         delete :destroy, params: { question_id: question.id, id: answer }, format: :js
 
+        expect(response).to redirect_to question_path(question)
+      end
+    end
+  end
+
+  describe 'PATCH #best' do
+    let(:users) { create_list(:user, 2) }
+    let!(:question) { create(:question, user: users[0]) }
+    let!(:answers) { create_list(:answer, 2, question: question, user: users[0]) }
+
+    context 'user is the author of question' do
+      before { login(users[0]) }
+
+      context 'there was not the best answer' do
+        it 'sets best answer for question' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          question.reload
+          expect(question.answer).to eq answers[0]
+        end
+
+        it 'renders best view' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          expect(response).to render_template :best
+        end
+      end
+
+      context 'there was the best answer' do
+        before { question.update(answer: answers[1]) }
+
+        it 'sets new best answer for question' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          question.reload
+          expect(question.answer).to eq answers[0]
+        end
+
+        it 'renders best view' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          expect(response).to render_template :best
+        end
+      end
+    end
+
+    context 'user is not the author of question' do
+      it 'redirect_to question page' do
+        login(users[1])
+
+        patch :best, params: { answer_id: answers[0] }, format: :js
         expect(response).to redirect_to question_path(question)
       end
     end

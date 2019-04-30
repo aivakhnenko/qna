@@ -27,6 +27,16 @@ class AnswersController < ApplicationController
     end
   end
 
+  def best
+    @answer = Answer.find(params[:answer_id])
+    @question = @answer.question
+    if current_user.author_of?(@question)
+      @question.update(answer: @answer)
+    else
+      redirect_to @question
+    end
+  end
+
   private
 
   def answer_params
