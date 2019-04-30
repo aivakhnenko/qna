@@ -9,8 +9,12 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params)
-    @question = @answer.question
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
+    else
+      redirect_to @answer.question, error: 'Only author can edit this answer'
+    end
   end
 
   def destroy
@@ -18,7 +22,7 @@ class AnswersController < ApplicationController
       @answer.destroy
       redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     else
-      redirect_to @answer.question, error: 'Only author can delete this question'
+      redirect_to @answer.question, error: 'Only author can delete this answer'
     end
   end
 

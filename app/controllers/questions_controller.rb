@@ -1,9 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :find_question, only: %i[show destroy]
+  before_action :find_question, only: %i[show update destroy]
 
   def index
     @questions = Question.all
+  end
+
+  def show
+    @answer = @question.answers.new
   end
 
   def new
@@ -19,8 +23,12 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def show
-    @answer = @question.answers.new
+  def update
+    if current_user.author_of?(@question)
+      @question.update(question_params)
+    else
+      redirect_to @question, error: 'Only author can delete this question'
+    end
   end
 
   def destroy
