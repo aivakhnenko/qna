@@ -25,7 +25,7 @@ feature 'User can choose best answer', %q{
   end
 
   describe 'Best answer already selected' do
-    background { question.update(answer: answers[1]) }
+    background { answers[1].best! }
 
     scenario 'Author of the question select other best answer', js: true do
       sign_in(users[0])
