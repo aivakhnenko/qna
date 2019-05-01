@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2019_04_30_183954) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.boolean "best", default: false, null: false
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -31,8 +32,6 @@ ActiveRecord::Schema.define(version: 2019_04_30_183954) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.bigint "answer_id"
-    t.index ["answer_id"], name: "index_questions_on_answer_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -50,6 +49,5 @@ ActiveRecord::Schema.define(version: 2019_04_30_183954) do
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
-  add_foreign_key "questions", "answers"
   add_foreign_key "questions", "users"
 end

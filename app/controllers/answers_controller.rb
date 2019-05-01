@@ -31,7 +31,7 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:answer_id])
     @question = @answer.question
     if current_user.author_of?(@question)
-      @question.update(answer: @answer)
+      @answer.best!
     else
       redirect_to @question
     end

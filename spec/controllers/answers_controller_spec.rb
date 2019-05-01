@@ -147,8 +147,7 @@ RSpec.describe AnswersController, type: :controller do
       context 'there was not the best answer' do
         it 'sets best answer for question' do
           patch :best, params: { answer_id: answers[0] }, format: :js
-          question.reload
-          expect(question.answer).to eq answers[0]
+          expect(answers[0].reload.best).to be_truthy
         end
 
         it 'renders best view' do
@@ -158,12 +157,16 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'there was the best answer' do
-        before { question.update(answer: answers[1]) }
+        before { answers[1].best! }
+
+        it 'unsets previous best answer for question' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          expect(answers[1].reload.best).to be_falsey
+        end
 
         it 'sets new best answer for question' do
           patch :best, params: { answer_id: answers[0] }, format: :js
-          question.reload
-          expect(question.answer).to eq answers[0]
+          expect(answers[0].reload.best).to be_truthy
         end
 
         it 'renders best view' do
