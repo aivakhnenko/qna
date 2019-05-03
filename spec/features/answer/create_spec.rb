@@ -17,7 +17,7 @@ feature 'User can post answer', %q{
     end
 
     scenario 'posts an answer', js: true do
-      fill_in 'Your answer:', with: 'answer answer answer'
+      fill_in 'Your answer', with: 'answer answer answer'
       click_on 'Post answer'
 
       expect(page).to have_content 'Your answer successfully created.'
@@ -28,6 +28,15 @@ feature 'User can post answer', %q{
       click_on 'Post answer'
 
       expect(page).to have_content "Answer can't be blank"
+    end
+
+    scenario 'posts an answer with attached files', js: true do
+      fill_in 'Your answer', with: 'answer answer answer'
+      attach_file 'Files', [Rails.root.join('spec', 'rails_helper.rb'), Rails.root.join('spec', 'spec_helper.rb')]
+      click_on 'Post answer'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
   end
 

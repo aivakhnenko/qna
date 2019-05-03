@@ -1,12 +1,12 @@
 - if answer.persisted?
-  div class="answer-#{answer.id}"
+  div id="answer-#{answer.id}"
     p= answer.body
+    - if answer.files.attached?
+      = render partial: 'attachments/attachment', collection: answer.files
     - if current_user&.author_of?(@question)
       p= link_to 'Best answer', answer_best_path(answer), method: :patch, remote: true
     - if current_user&.author_of?(answer)
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       p= link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
-      = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-        = f.label :body, 'Your answer'
-        = f.text_area :body
-        = f.submit 'Save'
+      .edit-answer-form.hidden
+        = render partial: 'answers/form', locals: { model: answer, submit_text: 'Save' }

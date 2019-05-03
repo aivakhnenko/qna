@@ -1,0 +1,3 @@
+div id="attachment-#{attachment.id}"
+  p= link_to attachment.filename.to_s, url_for(attachment)
+  p= link_to 'Remove file', attachment_path(attachment), method: :delete, remote: true

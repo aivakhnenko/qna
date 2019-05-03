@@ -15,7 +15,7 @@ feature 'User can choose best answer', %q{
 
     visit question_path(question)
 
-    within ".answer-#{answers[1].id}" do
+    within "#answer-#{answers[1].id}" do
       click_on 'Best answer'
     end
 
@@ -32,7 +32,7 @@ feature 'User can choose best answer', %q{
 
       visit question_path(question)
 
-      within ".answer-#{answers[0].id}" do
+      within "#answer-#{answers[0].id}" do
         click_on 'Best answer'
       end
 

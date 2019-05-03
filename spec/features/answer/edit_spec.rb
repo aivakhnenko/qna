@@ -22,7 +22,7 @@ feature 'User can edit his answer', %q{
 
       scenario 'without errors', js: true do
         within '.answers' do
-          fill_in 'Your answer:', with: 'edited answer'
+          fill_in 'Your answer', with: 'edited answer'
           click_on 'Save'
 
           expect(page).to_not have_content answer.body
@@ -33,11 +33,30 @@ feature 'User can edit his answer', %q{
 
       scenario 'with errors', js: true do
         within '.answers' do
-          fill_in 'Your answer:', with: ''
+          fill_in 'Your answer', with: ''
           click_on 'Save'
         end
 
         expect(page).to have_content "Answer can't be blank"
+      end
+
+      scenario 'with attaching new file', js: true do
+        within '.answers' do
+          expect(page).to have_selector 'input[type=file]'
+          attach_file 'Files', Rails.root.join('spec', 'spec_helper.rb')
+          click_on 'Save'
+
+          expect(page).to have_link 'spec_helper.rb'
+          expect(page).to_not have_selector 'input[type=file]'
+        end
+      end
+
+      scenario 'with removing attached file', js: true do
+        within '.answers' do
+          click_on 'Remove file'
+
+          expect(page).to_not have_link 'rails_helper.rb'
+        end
       end
     end
 
