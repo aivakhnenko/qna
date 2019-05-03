@@ -1,7 +1,11 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: :create
-  before_action :find_answer, only: %i[update destroy]
+  before_action :find_answer, only: %i[show update destroy]
+
+  def show
+    redirect_to @answer.question
+  end
 
   def create
     @answer = @question.answers.new(answer_params.merge(user: current_user))
@@ -40,7 +44,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 
   def find_question
@@ -48,6 +52,6 @@ class AnswersController < ApplicationController
   end
 
   def find_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 end

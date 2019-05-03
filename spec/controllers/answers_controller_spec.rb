@@ -4,6 +4,18 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
 
+  describe 'GET #show' do
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    before { login(user) }
+
+    before { get :show, params: { id: answer } }
+
+    it 'redirects to question page' do
+      expect(response).to redirect_to question_path(question)
+    end
+  end
+
   describe 'POST #create' do
     before { login(user) }
 
@@ -28,8 +40,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer).user).to eq subject.current_user
       end
 
-      it 'redirects to question show' do
-        expect(response).to render_template('create')
+      it 'renders create view' do
+        expect(response).to render_template :create
       end
     end
 
@@ -38,10 +50,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) }, format: :js }.not_to change(Answer, :count)
       end
 
-      it 're-render question show view' do
+      it 'renders create view' do
         post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) }, format: :js
 
-        expect(response).to render_template('create')
+        expect(response).to render_template :create
       end
     end
   end
@@ -114,7 +126,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { question_id: question.id, id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirect_to question page' do
+      it 'renders destroy view' do
         delete :destroy, params: { question_id: question.id, id: answer }, format: :js
 
         expect(response).to render_template :destroy

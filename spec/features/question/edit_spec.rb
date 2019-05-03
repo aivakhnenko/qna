@@ -20,6 +20,7 @@ feature 'User can edit his question', %q{
 
       scenario 'without errors', js: true do
         within '.question' do
+          expect(page).to have_selector 'textarea'
           fill_in 'Body', with: 'edited question body'
           click_on 'Save question'
 
@@ -36,6 +37,25 @@ feature 'User can edit his question', %q{
         end
 
         expect(page).to have_content "Body can't be blank"
+      end
+
+      scenario 'with attaching new file', js: true do
+        within '.question' do
+          expect(page).to have_selector 'input[type=file]'
+          attach_file 'Files', Rails.root.join('spec', 'spec_helper.rb')
+          click_on 'Save question'
+
+          expect(page).to have_link 'spec_helper.rb'
+          expect(page).to_not have_selector 'input[type=file]'
+        end
+      end
+
+      scenario 'with removing attached file', js: true do
+        within '.question' do
+          click_on 'Remove file'
+
+          expect(page).to_not have_link 'rails_helper.rb'
+        end
       end
     end
 
