@@ -2,6 +2,12 @@ h1= @question.title
 p= @question.body
 - if @question.files.attached?
   = render partial: 'attachments/attachment', collection: @question.files
+- if @question.links.any?
+  .links
+    p Links:
+    ul
+      - @question.links.each do |link|
+        li= link_to link.name, link.url
 - if current_user&.author_of?(@question)
   p= link_to 'Edit question', '#', class: 'edit-question-link'
   p= link_to 'Delete question', question_path(@question), method: :delete

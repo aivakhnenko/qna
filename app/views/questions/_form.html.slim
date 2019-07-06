@@ -1,8 +1,20 @@
 = form_with model: @question, remote: true do |f|
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
-  = f.label :files
-  = f.file_field :files, multiple: true, direct_upload: true
-  = f.submit submit_text
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+  p
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
+  p Links:
+  p
+    = f.fields_for :links do |l|
+      p
+        = l.label :name, 'Link name'
+        = l.text_field :name
+      p
+        = l.label :url
+        = l.text_field :url
+  p= f.submit submit_text

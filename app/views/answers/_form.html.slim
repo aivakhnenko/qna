@@ -1,6 +1,8 @@
 = form_with model: model, remote: true do |f|
-  = f.label :body, 'Your answer'
-  = f.text_area :body
-  = f.label :files
-  = f.file_field :files, multiple: true, direct_upload: true
-  = f.submit submit_text
+  p
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+  p
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
+  p= f.submit submit_text
