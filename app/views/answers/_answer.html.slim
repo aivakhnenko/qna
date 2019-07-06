@@ -3,6 +3,12 @@
     p= answer.body
     - if answer.files.attached?
       = render partial: 'attachments/attachment', collection: answer.files
+    - if @answer.links.any?
+      .links
+        p Links:
+        ul
+          - @answer.links.each do |link|
+            li= link_to link.name, link.url
     - if current_user&.author_of?(@question)
       p= link_to 'Best answer', answer_best_path(answer), method: :patch, remote: true
     - if current_user&.author_of?(answer)
