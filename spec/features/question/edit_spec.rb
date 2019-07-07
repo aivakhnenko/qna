@@ -57,6 +57,22 @@ feature 'User can edit his question', %q{
           expect(page).to_not have_link 'rails_helper.rb'
         end
       end
+
+      scenario 'with adding new link', js: true do
+        within '.question' do
+          click_on 'add link'
+
+          within '#links .nested-fields:nth-of-type(2)' do
+            fill_in 'Link name', with: 'My link 2'
+            fill_in 'Url', with: 'https://yandex.ru'
+          end
+
+          click_on 'Save question'
+
+          expect(page).to have_link 'My link', href: 'https://www.google.com'
+          expect(page).to have_link 'My link 2', href: 'https://yandex.ru'
+        end
+      end
     end
 
     scenario "can not edit other user's question", js: true do
