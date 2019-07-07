@@ -12,6 +12,7 @@ FactoryBot.define do
 
     after(:build) do |answer|
       answer.files.attach(io: File.open(Rails.root.join('spec', 'rails_helper.rb')), filename: 'rails_helper.rb')
+      answer.links.new(name: 'My link', url: 'https://www.google.com')
     end
   end
 end

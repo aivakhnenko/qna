@@ -3,7 +3,7 @@ p= @question.body
 - if @question.files.attached?
   = render partial: 'attachments/attachment', collection: @question.files
 - if @question.links.any?
-  .links
+  .links-list
     p Links:
     ul
       = render @question.links
