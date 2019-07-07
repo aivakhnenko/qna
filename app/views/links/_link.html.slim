@@ -1,0 +1,6 @@
+li
+  - if link.gist?
+    = link.name
+    script src="#{link.url}.js"
+  - else
+    = link_to link.name, link.url
