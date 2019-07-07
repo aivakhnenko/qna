@@ -9,4 +9,5 @@ Rails.application.routes.draw do
       patch :best
     end
   end
+  resources :links, only: :destroy
 end

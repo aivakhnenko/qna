@@ -4,7 +4,7 @@
     - if answer.files.attached?
       = render partial: 'attachments/attachment', collection: answer.files
     - if answer.links.any?
-      .links
+      .links-list
         p Links:
         ul
           = render answer.links
