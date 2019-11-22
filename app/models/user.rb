@@ -10,4 +10,8 @@ class User < ApplicationRecord
   def author_of?(resource)
     resource.user_id == self.id
   end
+
+  def rewards
+    Reward.where(question_id: answers.best.pluck(:question_id))
+  end
 end

@@ -5,6 +5,8 @@ class Reward < ApplicationRecord
   validates :name, presence: true
   validate :validate_image
 
+  scope :best_first, -> { order(best: :desc) }
+
   private
 
   def validate_image
