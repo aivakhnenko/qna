@@ -1,0 +1,9 @@
+h1 Your rewards
+- if @rewards.empty?
+  p You have no rewards yet.
+- else
+  - @rewards.each do |reward|
+    p= "Question title: #{reward.question.title}"
+    p= "Reward name: #{reward.name}"
+    p Reward image:
+    p= image_tag url_for(reward.image)

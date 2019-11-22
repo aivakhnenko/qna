@@ -10,6 +10,7 @@ class Answer < ApplicationRecord
   validates :best, inclusion: [true, false]
 
   scope :best_first, -> { order(best: :desc) }
+  scope :best, -> { where(best: true) }
 
   def best!
     transaction do

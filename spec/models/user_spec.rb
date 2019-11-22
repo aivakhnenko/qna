@@ -25,4 +25,15 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '#rewards' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let!(:reward) { create(:reward, question: question) }
+    let(:answer) { create(:answer, user: user, question: question) }
+
+    before { answer.best! }
+
+    it { expect(user.rewards.ids).to eq [reward.id] }
+  end
 end
