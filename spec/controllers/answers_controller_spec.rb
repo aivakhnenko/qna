@@ -151,7 +151,8 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #best' do
     let(:users) { create_list(:user, 2) }
     let!(:question) { create(:question, user: users[0]) }
-    let!(:answers) { create_list(:answer, 2, question: question, user: users[0]) }
+    let!(:reward) { create(:reward, question: question) }
+    let!(:answers) { users.map { |user| create(:answer, question: question, user: user) } }
 
     context 'user is the author of question' do
       before { login(users[0]) }
@@ -160,6 +161,11 @@ RSpec.describe AnswersController, type: :controller do
         it 'sets best answer for question' do
           patch :best, params: { answer_id: answers[0] }, format: :js
           expect(answers[0].reload.best).to be_truthy
+        end
+
+        it 'sets reward for answer author' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          expect(answers[0].user.rewards.ids).to match_array [reward.id]
         end
 
         it 'renders best view' do
@@ -176,9 +182,19 @@ RSpec.describe AnswersController, type: :controller do
           expect(answers[1].reload.best).to be_falsey
         end
 
+        it 'unsets reward from author of previous best answer' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          expect(answers[1].user.rewards.ids).to match_array []
+        end
+
         it 'sets new best answer for question' do
           patch :best, params: { answer_id: answers[0] }, format: :js
           expect(answers[0].reload.best).to be_truthy
+        end
+
+        it 'sets reward for author of new best answer' do
+          patch :best, params: { answer_id: answers[0] }, format: :js
+          expect(answers[0].user.rewards.ids).to match_array [reward.id]
         end
 
         it 'renders best view' do

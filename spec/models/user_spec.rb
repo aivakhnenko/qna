@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:answers).dependent(:destroy) }
+  it { should have_many(:rewards).dependent(:nullify) }
 
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
@@ -24,16 +25,5 @@ RSpec.describe User, type: :model do
         it { expect(user).not_to be_author_of(resource) }
       end
     end
-  end
-
-  describe '#rewards' do
-    let(:user) { create(:user) }
-    let(:question) { create(:question, user: user) }
-    let!(:reward) { create(:reward, question: question) }
-    let(:answer) { create(:answer, user: user, question: question) }
-
-    before { answer.best! }
-
-    it { expect(user.rewards.ids).to eq [reward.id] }
   end
 end
