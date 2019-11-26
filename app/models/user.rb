@@ -6,12 +6,9 @@ class User < ApplicationRecord
 
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
+  has_many :rewards, dependent: :nullify
 
   def author_of?(resource)
     resource.user_id == self.id
-  end
-
-  def rewards
-    Reward.where(question_id: answers.best.pluck(:question_id))
   end
 end

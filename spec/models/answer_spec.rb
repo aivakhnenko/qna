@@ -15,9 +15,10 @@ RSpec.describe Answer, type: :model do
   it { should_not allow_value(nil).for(:best) }
 
   describe 'methods' do
-    let(:user) { create(:user) }
-    let(:question) { create(:question, user: user) }
-    let!(:answers) { create_list(:answer, 2, question: question, user: user) }
+    let(:users) { create_list(:user, 2) }
+    let(:question) { create(:question, user: users[0]) }
+    let!(:reward) { create(:reward, question: question) }
+    let!(:answers) { users.map { |user| create(:answer, question: question, user: user) } }
 
     describe '.best_first' do
       before { answers[1].best! }
@@ -33,14 +34,19 @@ RSpec.describe Answer, type: :model do
 
     describe '#best!' do
       context 'best answer is not selected' do
-        it { expect { answers[0].best! }.to change(answers[0], :best).to(true) }
+        it { expect { answers[0].best! }.to change(answers[0], :best).to true }
+        it { expect { answers[0].best! }.to change(reward, :user).to answers[0].user }
+        it { expect { answers[0].best! }.to change { answers[0].user.rewards.ids }.to [reward.id] }
       end
 
       context 'best answer is selected' do
         before { answers[1].best! }
 
-        it { expect { answers[0].best! }.to change { answers[1].reload.best }.to(false) }
-        it { expect { answers[0].best! }.to change(answers[0], :best).to(true) }
+        it { expect { answers[0].best! }.to change { answers[1].reload.best }.to false }
+        it { expect { answers[0].best! }.to change(answers[0], :best).to true }
+        it { expect { answers[0].best! }.to change(reward, :user).to answers[0].user }
+        it { expect { answers[0].best! }.to change(answers[1].user.rewards, :ids).to [] }
+        it { expect { answers[0].best! }.to change(answers[0].user.rewards, :ids).to [reward.id] }
       end
     end
   end
