@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :answers, shallow: true, only: %i[show create update destroy] do
       patch :best
     end
+    post :vote, on: :member
   end
   resources :links, only: :destroy
   resources :rewards, only: :index
