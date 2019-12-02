@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :find_question, only: %i[show update destroy]
+  before_action :find_question, only: %i[show update destroy vote]
 
   def index
     @questions = Question.all
@@ -9,6 +9,8 @@ class QuestionsController < ApplicationController
   def show
     @answer = @question.answers.new
     @answer.links.build
+    @vote = @question.vote(current_user)
+    @votes = @question.votes.result
   end
 
   def new
@@ -40,6 +42,14 @@ class QuestionsController < ApplicationController
       redirect_to questions_path, notice: 'Your question successfully deleted.'
     else
       redirect_to @question, error: 'Only author can delete this question'
+    end
+  end
+
+  def vote
+    @question.vote!(current_user, params[:value])
+
+    respond_to do |format|
+      format.json { render json: { votes: @question.votes.result, vote: @question.vote(current_user) } }
     end
   end
 
