@@ -20,6 +20,6 @@ module Voted
   end
 
   def set_votable
-    @votable = model_klass.with_attached_files.find(params[:id])
+    @votable = model_klass.find(params[:id])
   end  
 end
