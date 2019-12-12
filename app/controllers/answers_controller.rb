@@ -3,6 +3,8 @@ class AnswersController < ApplicationController
   before_action :find_question, only: :create
   before_action :find_answer, only: %i[show update destroy]
 
+  include Voted
+
   def show
     redirect_to @answer.question
   end

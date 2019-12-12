@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :find_question, only: %i[show update destroy vote]
+  before_action :find_question, only: %i[show update destroy]
 
   include Voted
 
@@ -11,8 +11,6 @@ class QuestionsController < ApplicationController
   def show
     @answer = @question.answers.new
     @answer.links.build
-    @vote = @question.vote(current_user)
-    @votes = @question.votes.result
   end
 
   def new

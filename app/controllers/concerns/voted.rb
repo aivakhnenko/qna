@@ -15,7 +15,11 @@ module Voted
   
   private
 
+  def model_klass
+    controller_name.classify.constantize
+  end
+
   def set_votable
-    @votable = instance_variable_get("@#{controller_name.singularize}")
+    @votable = model_klass.with_attached_files.find(params[:id])
   end  
 end
