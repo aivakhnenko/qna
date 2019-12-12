@@ -8,6 +8,7 @@
         p Links:
         ul
           = render answer.links
+    = render 'votes', resource: answer
     - if current_user&.author_of?(@question)
       p= link_to 'Best answer', answer_best_path(answer), method: :patch, remote: true
     - if current_user&.author_of?(answer)

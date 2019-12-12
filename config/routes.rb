@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :questions, only: %i[index show new create update destroy], concerns: [:votable] do
     resources :attachments, shallow: true, only: :destroy
-    resources :answers, shallow: true, only: %i[show create update destroy] do
+    resources :answers, shallow: true, only: %i[show create update destroy], concerns: [:votable] do
       patch :best
     end
   end

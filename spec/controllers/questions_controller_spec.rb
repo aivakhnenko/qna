@@ -23,7 +23,6 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     let(:question) { create(:question, user: user) }
-    let!(:vote) { create(:vote, votable: question, user: user, value: 1) }
     
     before { get :show, params: { id: question } }
 
@@ -37,14 +36,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns new Link to @answer.links' do
       expect(assigns(:answer).links.first).to be_a_new(Link)
-    end
-
-    it 'assigns user vote value to @vote' do
-      expect(assigns(:vote)).to eq 1
-    end
-
-    it 'assigns votes result to @votes' do
-      expect(assigns(:votes)).to eq 1
     end
 
     it 'renders show view' do
