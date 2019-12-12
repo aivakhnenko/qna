@@ -1,9 +1,9 @@
 - if current_user && !current_user.author_of?(resource)
   .votes
-    p.vote class='hidden'= resource.vote(current_user)
-    p.voted-up Voted up
-    p.voted-down Voted down
-    p.unvote= link_to 'Cancel vote', polymorphic_path([:vote, resource], value: 0), remote: true, method: :post
-    p.vote-up= link_to 'Vote up', polymorphic_path([:vote, resource], value: 1), remote: true, method: :post
-    p.vote-down= link_to 'Vote down', polymorphic_path([:vote, resource], value: -1), remote: true, method: :post
+    p.vote.hidden= resource.vote(current_user)
+    p.voted-up.hidden Voted up
+    p.voted-down.hidden Voted down
+    p.unvote.hidden= link_to 'Cancel vote', polymorphic_path([:vote, resource], value: 0), remote: true, method: :post
+    p.vote-up.hidden= link_to 'Vote up', polymorphic_path([:vote, resource], value: 1), remote: true, method: :post
+    p.vote-down.hidden= link_to 'Vote down', polymorphic_path([:vote, resource], value: -1), remote: true, method: :post
     p.result= "Votes: #{resource.votes.result}"

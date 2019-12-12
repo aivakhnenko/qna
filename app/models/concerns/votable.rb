@@ -10,18 +10,17 @@ module Votable
   end
 
   def vote!(user, value)
-    return if user == self.user
+    return if user.id == self.user.id
     vote = votes.where(user: user).first
     value = value.to_i
-    return unless (-1..1).include?(value)
     if vote
       if value.zero?
         vote.destroy!
       elsif value != vote.value
-        vote.update!(value: value)
+        vote.update(value: value)
       end
     else
-      votes.create!(user: user, value: value) if value.nonzero?
+      votes.create(user: user, value: value)
     end
   end
 end
