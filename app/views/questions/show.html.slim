@@ -1,7 +1,7 @@
 .question-errors
   = render 'errors', resource: @question
 .question
-  = render @question
+  = render 'question_full', question: @question
 
 .answer-errors
   = render 'errors', resource: @answer
