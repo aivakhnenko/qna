@@ -9,7 +9,6 @@ $(document).on('turbolinks:load', function(){
   if (questions) {
     App.cable.subscriptions.create('QuestionsChannel', {
       connected: function(){
-        console.log('Connected!');
         this.perform('follow');
       },
       received: function(data){

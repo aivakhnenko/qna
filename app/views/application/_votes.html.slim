@@ -1,6 +1,7 @@
-- if current_user && !current_user.author_of?(resource)
-  .votes
-    p.vote.hidden= resource.vote(current_user)
+- action_cable ||= false
+- if action_cable || (current_user && !current_user.author_of?(resource))
+  .votes class=('hidden' if action_cable)
+    p.vote.hidden= action_cable ? 0 : resource.vote(current_user)
     p.voted-up.hidden Voted up
     p.voted-down.hidden Voted down
     p.unvote.hidden= link_to 'Cancel vote', polymorphic_path([:vote, resource], value: 0), remote: true, method: :post

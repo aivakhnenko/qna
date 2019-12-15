@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  skip_before_action :authenticate_user!, only: %i[index show]
+  
   before_action :find_question, only: %i[show update destroy]
 
   after_action :publish_question, only: :create
@@ -55,6 +56,10 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.with_attached_files.find(params[:id])
+    if @question
+      gon.question_id = @question.id
+      gon.question_user_id = @question.user_id
+    end
   end
 
   def publish_question

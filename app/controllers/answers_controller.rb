@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
   before_action :find_question, only: :create
   before_action :find_answer, only: %i[show update destroy]
+
+  after_action :publish_answer, only: :create
 
   include Voted
 
@@ -55,5 +56,17 @@ class AnswersController < ApplicationController
 
   def find_answer
     @answer = Answer.with_attached_files.find(params[:id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    partial = ApplicationController.render(
+        partial: 'answers/answer',
+        locals: { answer: @answer, action_cable: true }
+      )
+    ActionCable.server.broadcast "questions/#{@question.id}/answers", {
+      partial: partial,
+      answer_user_id: @answer.user_id
+    }
   end
 end

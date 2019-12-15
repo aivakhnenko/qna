@@ -20,6 +20,7 @@ feature "User can vote for other user's answer", %q{
 
       scenario '- votes for answer', js: true do
         within '.answers' do        
+
           click_on 'Vote up'
 
           within '.votes' do
