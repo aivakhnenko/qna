@@ -1,4 +1,6 @@
-document.addEventListener('turbolinks:load', function() {
+document.addEventListener('turbolinks:load', votes);
+
+function votes(){
   var links = document.querySelectorAll('.votes .unvote a, .votes .vote-up a, .votes .vote-down a');
   links.forEach(function(link) { link.addEventListener('ajax:success', vote); });
 
@@ -7,7 +9,7 @@ document.addEventListener('turbolinks:load', function() {
     var vote = parseInt(block.querySelector('.vote').innerHTML);
     vote_links(block, vote);
   });
-})
+}
 
 function vote(e){
   var votes = e.detail[0];

@@ -40,9 +40,36 @@ feature 'User can post answer', %q{
     end
   end
 
-  scenario 'Unauthenticated user can not post an answer', js: true do
-    visit question_path(question)
+  describe 'Unauthenticated user' do
+    scenario 'cannot post an answer', js: true do
+      visit question_path(question)
 
-    expect(page).to_not have_link 'Post answer'
+      expect(page).to_not have_link 'Post answer'
+    end
+  end
+
+  describe 'Within multiple sessions' do
+    scenario 'user post an answer in one session, and guest sees it in another one', js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Your answer', with: 'answer answer answer'
+        click_on 'Post answer'
+
+        expect(page).to have_content 'Your answer successfully created.'
+        expect(page).to have_content 'answer answer answer'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'answer answer answer'
+      end
+    end
   end
 end

@@ -1,3 +1,4 @@
+- action_cable ||= false
 - if answer.persisted?
   div id="answer-#{answer.id}"
     p= answer.body
@@ -7,12 +8,14 @@
       .links-list
         p Links:
         ul
-          = render answer.links
-    = render 'votes', resource: answer
-    - if current_user&.author_of?(@question)
-      p= link_to 'Best answer', answer_best_path(answer), method: :patch, remote: true
-    - if current_user&.author_of?(answer)
-      p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-      p= link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
-      .edit-answer-form.hidden
-        = render partial: 'answers/form', locals: { model: answer, submit_text: 'Save' }
+          = render partial: 'links/link', collection: answer.links, locals: { action_cable: action_cable }
+    = render 'votes', resource: answer, action_cable: action_cable
+    - if action_cable || current_user&.author_of?(@question)
+      .best-answer-link class=('hidden' if action_cable)
+        p= link_to 'Best answer', answer_best_path(answer), method: :patch, remote: true
+    - if action_cable || current_user&.author_of?(answer)
+      .change-answer-links class=('hidden' if action_cable)
+        p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+        p= link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+        .edit-answer-form.hidden
+          = render partial: 'answers/form', locals: { model: answer, submit_text: 'Save' }

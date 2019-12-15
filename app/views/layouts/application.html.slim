@@ -5,11 +5,12 @@ html
     = csrf_meta_tags
     = csp_meta_tag
     = action_cable_meta_tag
+    = Gon::Base.render_data
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   body
     - if user_signed_in?
-      p= link_to 'Sign out', destroy_user_session_path, :method=>'delete'
+      p= link_to 'Sign out', destroy_user_session_path, method: 'delete'
     - else
       p= link_to 'Sign in', new_user_session_path
     p class="notice" = notice 

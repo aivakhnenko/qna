@@ -56,14 +56,14 @@ feature 'User can create question', %q{
   end
 
   describe 'Unauthenticated user' do
-    scenario 'tries asks a question' do
+    scenario 'cannot ask a question' do
       visit questions_path
 
       expect(page).to_not have_link 'Ask question'
     end
   end
 
-  describe 'Within multiple session' do
+  describe 'Within multiple sessions' do
     scenario 'user asks a question in one session, and guest sees it in another one', js: true do
       Capybara.using_session('user') do
         sign_in(user)
