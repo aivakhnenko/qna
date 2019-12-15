@@ -1,5 +1,5 @@
 h1 Questions
-- @questions.each do |question|
-  p= link_to question.title, question_path(question)
+.questions
+  = render @questions
 - if current_user
   p= link_to 'Ask question', new_question_path
