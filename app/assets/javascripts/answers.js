@@ -8,13 +8,14 @@ $(document).on('turbolinks:load', function(){
 
   var answers = document.querySelector('.answers');
   if (answers) {
-    App.cable.subscriptions.create('AnswersChannel', {
+    App.cable.subscriptions.create({ channel: 'AnswersChannel', question_id: gon.question_id }, {
       connected: function(){
-        this.perform('follow', { question_id: gon.question_id });
+        this.perform('follow');
       },
       received: function(data){
         var answer = answer_partial_for_user(data.partial, data.answer_user_id);
         answers.appendChild(answer);
+        watchComments(answer);
       }
     });
   }
@@ -37,6 +38,12 @@ function answer_partial_for_user(partial, answer_user_id){
     answer.querySelector('.change-answer-links').remove();
     answer.querySelectorAll('.delete-link').forEach(function(link) { link.remove(); });
     answer.querySelector('.votes').classList.remove('hidden');
+  }
+  if (gon.current_user_id) {
+    answer.querySelector('.new-comment-form').classList.remove('hidden');
+  }
+  else {
+    answer.querySelector('.new-comment-form').remove();
   }
   return answer;
 }

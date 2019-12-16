@@ -8,9 +8,9 @@ function watchComments(area){
   area.querySelectorAll('.comments').forEach(function (block){
     var stream = block.dataset.commentable + '/comments';
     var commentsList = block.querySelector('.comments-list');
-    App.cable.subscriptions.create('CommentsChannel', {
+    App.cable.subscriptions.create({ channel: 'CommentsChannel', stream: stream }, {
       connected: function(){
-        this.perform('follow', { stream: stream });
+        this.perform('follow');
       },
       received: function(data){
         commentsList.insertAdjacentHTML('beforeend', '<p>' + data.text + '</p>');
