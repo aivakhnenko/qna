@@ -1,0 +1,13 @@
+- @comment ||= resource.comments.build
+.comments data={ commentable: "#{resource.class.to_s.downcase}/#{resource.id}" }
+  .comments-list
+    - resource.comments.each do |comment|
+      p = comment.text
+  .comment-errors
+    = render 'errors', resource: @comment
+  .new-comment-form
+    = form_with url: polymorphic_path([:comment, resource]), model: @comment do |f|
+      p
+        = f.label :text, 'Comment: '
+        = f.text_field :text
+      p= f.submit 'Post comment'

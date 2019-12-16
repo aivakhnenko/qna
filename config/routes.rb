@@ -6,8 +6,11 @@ Rails.application.routes.draw do
   concern :votable do
     post :vote, on: :member
   end
+  concern :commentable do
+    post :comment, on: :member
+  end
 
-  resources :questions, only: %i[index show new create update destroy], concerns: [:votable] do
+  resources :questions, only: %i[index show new create update destroy], concerns: [:votable, :commentable] do
     resources :attachments, shallow: true, only: :destroy
     resources :answers, shallow: true, only: %i[show create update destroy], concerns: [:votable] do
       patch :best
