@@ -11,7 +11,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_params.merge(user: current_user))
+    @answer = @question.answers.build(answer_params.merge(user: current_user))
     flash.now[:notice] = 'Your answer successfully created.' if @answer.save
   end
 

@@ -1,0 +1,5 @@
+$('.comment-errors').html('<%= render 'errors', resource: @comment %>');
+
+<% unless @comment.errors.present? %>
+  $('.new-comment-form #comment_text').val('');
+<% end %>

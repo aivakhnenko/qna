@@ -10,7 +10,7 @@ $(document).on('turbolinks:load', function(){
   if (answers) {
     App.cable.subscriptions.create('AnswersChannel', {
       connected: function(){
-        this.perform('follow', { question_id: gon.question_id});
+        this.perform('follow', { question_id: gon.question_id });
       },
       received: function(data){
         var answer = answer_partial_for_user(data.partial, data.answer_user_id);
