@@ -59,10 +59,10 @@ feature "User can post comments for question", %q{
   end
 
   describe 'Unauthenticated user' do
-    scenario 'cannot comment', js: true do
+    scenario 'cannot comment question', js: true do
       visit question_path(question)
 
-      expect(page).to_not have_link 'Post comment'
+      expect(page).to_not have_button 'Post comment'
     end
   end
 end

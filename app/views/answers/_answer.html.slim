@@ -10,6 +10,7 @@
         ul
           = render partial: 'links/link', collection: answer.links, locals: { action_cable: action_cable }
     = render 'votes', resource: answer, action_cable: action_cable
+    = render 'comments', resource: answer, action_cable: action_cable
     - if action_cable || current_user&.author_of?(@question)
       .best-answer-link class=('hidden' if action_cable)
         p= link_to 'Best answer', answer_best_path(answer), method: :patch, remote: true
