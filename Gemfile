@@ -44,6 +44,8 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'cocoon', '~> 1.2.14'
 gem 'file_validators', '~> 2.3.0'
 gem 'gon', '~> 6.3.2'
+gem 'omniauth', '~> 1.9.0'
+gem 'omniauth-github', '~> 1.3.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger
