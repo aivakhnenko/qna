@@ -46,6 +46,9 @@ gem 'file_validators', '~> 2.3.0'
 gem 'gon', '~> 6.3.2'
 gem 'omniauth', '~> 1.9.0'
 gem 'omniauth-github', '~> 1.3.0'
+gem 'omniauth-twitter', '~> 1.3.0'
+gem 'omniauth-facebook', '~> 5.0.0'
+gem 'omniauth-vkontakte', '~> 1.5.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger
@@ -65,6 +68,7 @@ group :development do
   # background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem "letter_opener"
 end
 
 group :test do
@@ -75,6 +79,7 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0.4'
   gem 'shoulda-matchers', '~> 4.0.1'
   gem 'launchy', '~> 2.4.3'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
