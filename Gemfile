@@ -46,9 +46,7 @@ gem 'file_validators', '~> 2.3.0'
 gem 'gon', '~> 6.3.2'
 gem 'omniauth', '~> 1.9.0'
 gem 'omniauth-github', '~> 1.3.0'
-gem 'omniauth-twitter', '~> 1.3.0'
 gem 'omniauth-facebook', '~> 5.0.0'
-gem 'omniauth-vkontakte', '~> 1.5.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger
