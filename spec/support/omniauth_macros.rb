@@ -7,5 +7,9 @@ module OmniauthMacros
         'email' => 'user1@test.com'
       }
     })
+    OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
+      'provider' => 'twitter',
+      'uid' => '123545'
+    })
   end
 end

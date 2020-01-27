@@ -63,4 +63,33 @@ RSpec.describe Services::FindForOauth do
       expect(authorization.uid).to eq auth.uid.to_s
     end
   end
+
+  context 'omniauth does not return email' do
+    let(:auth) { OmniAuth::AuthHash.new(provider: 'github', uid: 123) }
+
+    it 'creates new user' do
+      expect { subject.call }.to change(User, :count).by(1)
+    end
+
+    it 'returns new user' do
+      expect(subject.call).to be_a(User)
+    end
+
+    it 'fills user email with temporal value' do
+      user = subject.call
+      expect(user.email).to match /omniauth_tmp_.*@omniauth_tmp.tmp/
+    end
+
+    it 'creates authorization for user' do
+      user = subject.call
+      expect(user.authorizations).to_not be_empty
+    end
+
+    it 'creates authorization with provider and uid' do
+      authorization = subject.call.authorizations.first
+
+      expect(authorization.provider).to eq auth.provider
+      expect(authorization.uid).to eq auth.uid.to_s
+    end
+  end
 end
