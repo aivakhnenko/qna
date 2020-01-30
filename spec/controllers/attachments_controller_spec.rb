@@ -27,10 +27,16 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: file }, format: :js }.not_to change(resource.files, :count)
       end
 
-      it 'redirect_to show page' do
-        delete :destroy, params: { id: file }, format: :js
+      it 'redirect_to show page for html request' do
+        delete :destroy, params: { id: file }
 
         expect(response).to redirect_to question_path(resource)
+      end
+
+      it 'responds with status forbidden for js request' do
+        delete :destroy, params: { id: file }, format: :js
+
+        expect(response).to have_http_status :forbidden
       end
     end
   end

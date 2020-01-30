@@ -152,10 +152,16 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq body
       end
 
-      it 'redirect_to question page' do
-        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+      it 'redirect_to question page for html request' do
+        patch :update, params: { id: question, question: { body: 'new body' } }
 
         expect(response).to redirect_to question_path(question)
+      end
+
+      it 'responds with status forbidden for js request' do
+        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+
+        expect(response).to have_http_status :forbidden
       end
     end
   end
