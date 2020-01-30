@@ -1,8 +1,10 @@
 class AnswersController < ApplicationController
-  before_action :find_question, only: :create
-  before_action :find_answer, only: %i[show update destroy]
+  before_action :find_answer, only: %i[show update destroy best]
+  before_action :find_question, only: %i[create update best]
 
   after_action :publish_answer, only: :create
+
+  authorize_resource
 
   include Voted
   include Commented
@@ -17,32 +19,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-      @question = @answer.question
-    else
-      redirect_to @answer.question, error: 'Only author can edit this answer'
-    end
+    @answer.update(answer_params)
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @question = @answer.question
-      @answer.destroy
-      flash.now[:notice] = 'Your answer successfully deleted.'
-    else
-      redirect_to @answer.question, error: 'Only author can delete this answer'
-    end
+    @answer.destroy
+    flash.now[:notice] = 'Your answer successfully deleted.'
   end
 
   def best
-    @answer = Answer.find(params[:answer_id])
-    @question = @answer.question
-    if current_user.author_of?(@question)
-      @answer.best!
-    else
-      redirect_to @question
-    end
+    authorize! :best, @answer
+    @answer.best!
   end
 
   private
@@ -51,12 +38,12 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])
   end
 
-  def find_question
-    @question = Question.find(params[:question_id])
+  def find_answer
+    @answer = Answer.with_attached_files.find(params[:answer_id] || params[:id])
   end
 
-  def find_answer
-    @answer = Answer.with_attached_files.find(params[:id])
+  def find_question
+    @question = params[:question_id] ? Question.find(params[:question_id]) : @answer.question
   end
 
   def publish_answer

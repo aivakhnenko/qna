@@ -6,5 +6,6 @@ FactoryBot.define do
   factory :reward do
     name
     image { Rack::Test::UploadedFile.new(Rails.root.join('public', 'favicon.ico'), 'image/ico') }
+    question { create(:question, user: create(:user)) }
   end
 end
