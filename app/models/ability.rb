@@ -29,6 +29,7 @@ class Ability
     guest_abilities
     can :create, [Question, Answer]
     can [:update, :destroy], [Question, Answer], user_id: user.id
+    can :destroy, ActiveStorage::Attachment, record: { user_id: user.id }
     can :destroy, Link, linkable: { user_id: user.id }
     can :best, Answer, question: { user_id: user.id }
     can :comment, [Question, Answer]

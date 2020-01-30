@@ -14,7 +14,10 @@ p= question.body
 = render 'votes', resource: question
 = render 'comments', resource: question
 - if current_user&.author_of?(question)
+- if can? :update, question
   p= link_to 'Edit question', '#', class: 'edit-question-link'
+- if can? :destroy, question
   p= link_to 'Delete question', question_path(question), method: :delete
+- if can? :update, question
   .question-form.hidden
     = render partial: 'form', locals: { submit_text: 'Save question' }

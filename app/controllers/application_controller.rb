@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
       @answer.question
     when Link
       @link.linkable
+    when ActiveStorage::Attachment
+      @attachment.record
     else
       root_path
     end

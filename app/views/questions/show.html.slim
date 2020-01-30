@@ -8,6 +8,6 @@
 .answers
   = render @question.answers.best_first
 
-- if current_user
+- if can? :create, Answer
   .new-answer-form
     = render partial: 'answers/form', locals: { model: [@question, @answer], submit_text: 'Post answer' }
