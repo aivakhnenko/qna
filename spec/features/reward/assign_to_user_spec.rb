@@ -18,6 +18,8 @@ feature 'User can see reward for his answer, that was choosen as the best one', 
 
     click_on 'Best answer'
 
+    wait_for_ajax
+
     visit rewards_path
 
     expect(page).to have_content question.title
