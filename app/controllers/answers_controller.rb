@@ -4,10 +4,10 @@ class AnswersController < ApplicationController
 
   after_action :publish_answer, only: :create
 
-  authorize_resource
-
   include Voted
   include Commented
+
+  authorize_resource
 
   def show
     redirect_to @answer.question

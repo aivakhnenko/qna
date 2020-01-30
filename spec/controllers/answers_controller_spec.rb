@@ -108,10 +108,16 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq body
       end
 
-      it 'redirect_to question page' do
-        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+      it 'redirect_to question page for html request' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }
 
         expect(response).to redirect_to question_path(question)
+      end
+
+      it 'responds with status forbidden for js request' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+
+        expect(response).to have_http_status :forbidden
       end
     end
   end
@@ -143,10 +149,16 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { question_id: question.id, id: answer }, format: :js }.not_to change(Answer, :count)
       end
 
-      it 'redirect_to question page' do
-        delete :destroy, params: { question_id: question.id, id: answer }, format: :js
+      it 'redirect_to question page for html request' do
+        delete :destroy, params: { question_id: question.id, id: answer }
 
         expect(response).to redirect_to question_path(question)
+      end
+
+      it 'responds with status forbidden for js request' do
+        delete :destroy, params: { question_id: question.id, id: answer }, format: :js
+
+        expect(response).to have_http_status :forbidden
       end
     end
   end
@@ -208,11 +220,18 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'user is not the author of question' do
-      it 'redirect_to question page' do
+      it 'redirect_to question page for html request' do
+        login(users[1])
+
+        patch :best, params: { answer_id: answers[0] }
+        expect(response).to redirect_to question_path(question)
+      end
+
+      it 'responds with status forbidden for js request' do
         login(users[1])
 
         patch :best, params: { answer_id: answers[0] }, format: :js
-        expect(response).to redirect_to question_path(question)
+        expect(response).to have_http_status :forbidden
       end
     end
   end
