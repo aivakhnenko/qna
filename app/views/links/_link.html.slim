@@ -5,6 +5,6 @@ li id="link-#{link.id}"
     script src="#{link.url}.js"
   - else
     = link_to link.name, link.url
-  - if action_cable || current_user&.author_of?(link.linkable)
+  - if action_cable || can?(:destroy, link)
     .delete-link class=('hidden' if action_cable)
       p= link_to 'Delete link', link_path(link), method: :delete, remote: true

@@ -18,8 +18,4 @@ class Link < ApplicationRecord
     url = URI.parse(url) rescue false
     url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
   end
-
-  def user_id
-    linkable.user_id
-  end
 end

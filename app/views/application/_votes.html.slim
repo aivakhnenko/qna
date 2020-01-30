@@ -1,5 +1,5 @@
 - action_cable ||= false
-- if action_cable || (current_user && !current_user.author_of?(resource))
+- if action_cable || can?(:vote, resource)
   .votes class=('hidden' if action_cable)
     p.vote.hidden= action_cable ? 0 : resource.vote(current_user)
     p.voted-up.hidden Voted up

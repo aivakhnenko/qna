@@ -1,5 +1,5 @@
 h1 Questions
 .questions
   = render @questions
--if can?(:create, Question)
+- if can? :create, Question
   p= link_to 'Ask question', new_question_path
