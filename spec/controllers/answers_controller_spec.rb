@@ -25,10 +25,10 @@ RSpec.describe AnswersController, type: :controller do
     context 'valid attributes' do
       let(:answer_attributes) { attributes_for(:answer) }
 
-      before { post :create, params: { question_id: answer_attributes[:question_id], answer: answer_attributes }, format: :js }
+      before { post :create, params: { question_id: question.id, answer: answer_attributes }, format: :js }
 
       it 'saves a new Answer in the database' do
-        expect { post :create, params: { question_id: answer_attributes[:question_id], answer: answer_attributes }, format: :js }.to change(Answer, :count).by(1)
+        expect { post :create, params: { question_id: question.id, answer: answer_attributes }, format: :js }.to change(Answer, :count).by(1)
       end
 
       it 'saves answer with attributes from params in the database' do
@@ -36,7 +36,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'relates saved answer to question from params' do
-        expect(assigns(:answer).question.id).to eq answer_attributes[:question_id]
+        expect(assigns(:answer).question.id).to eq question.id
       end
 
       it 'relates saved answer to user' do

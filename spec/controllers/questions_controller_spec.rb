@@ -70,7 +70,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'valid attributes' do
-      let(:question_attributes) { attributes_for(:question) }
+      let(:question_attributes) { attributes_for(:question, user_id: user.id) }
 
       before { post :create, params: { question: question_attributes } }
 

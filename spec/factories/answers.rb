@@ -5,7 +5,8 @@ FactoryBot.define do
 
   factory :answer do
     body
-    question_id { create(:question, user: create(:user)).id }
+    question
+    user
 
     trait :invalid do
       body { nil }
