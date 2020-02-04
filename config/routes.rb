@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks', registrations: 'registrations' }
   devise_scope :user do
     patch 'users/:id', to: 'registrations#update_email', as: 'user'
