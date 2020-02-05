@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AttachmentsController, type: :controller do
   describe 'DELETE #destroy' do
     let(:users) { create_list(:user, 2) }
-    let(:resource) { create(:question, user: users[0]) }
+    let(:resource) { create(:question, :with_file_attached, user: users[0]) }
     let!(:file) { resource.files.last }
 
     context 'user is resource author' do
