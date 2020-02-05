@@ -7,7 +7,8 @@ feature 'User can edit his question', %q{
 } do
 
   given!(:users) { create_list(:user, 2) }
-  given!(:question) { create(:question, user: users[0]) }
+  given!(:question) { create(:question, :with_file_attached, user: users[0]) }
+  given!(:link) { create(:link, linkable: question) }
 
   describe 'Authenticated user' do
     describe 'edits his question' do

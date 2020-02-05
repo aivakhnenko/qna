@@ -12,9 +12,17 @@ FactoryBot.define do
       body { nil }
     end
 
-    after(:build) do |answer|
-      answer.files.attach(io: File.open(Rails.root.join('spec', 'rails_helper.rb')), filename: 'rails_helper.rb')
-      answer.links.new(name: 'My link', url: 'https://www.google.com')
+    trait :with_file_attached do
+      after(:create) do |answer|
+        answer.files.attach(io: File.open(Rails.root.join('spec', 'rails_helper.rb')), filename: 'rails_helper.rb')
+      end
+    end
+
+    trait :with_file_attached do
+      after(:create) do |answer|
+        answer.files.attach(io: File.open(Rails.root.join('spec', 'rails_helper.rb')), filename: 'rails_helper.rb')
+        answer.files.attach(io: File.open(Rails.root.join('spec', 'spec_helper.rb')), filename: 'spec_helper.rb')
+      end
     end
   end
 end

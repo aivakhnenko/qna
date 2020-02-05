@@ -9,6 +9,7 @@ feature 'User can delete links from his answer', %q{
   given(:users) { create_list(:user, 2) }
   given(:question) { create(:question, user: users[0]) }
   given!(:answer) { create(:answer, question: question, user: users[0]) }
+  given!(:link) { create(:link, linkable: answer) }
 
   scenario 'User removes link from his answer', js: true do
     sign_in(users[0])

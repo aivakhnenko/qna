@@ -39,6 +39,7 @@ RSpec.configure do |config|
   config.include OmniauthMacros
   config.include ApiHelpers, type: :request
 
+  Rails.application.routes.default_url_options[:host] = "http://www.example.com"
   Capybara.javascript_driver = :selenium_chrome_headless
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

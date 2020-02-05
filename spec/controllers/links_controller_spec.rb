@@ -4,7 +4,7 @@ RSpec.describe LinksController, type: :controller do
   describe 'DELETE #destroy' do
     let(:users) { create_list(:user, 2) }
     let(:resource) { create(:question, user: users[0]) }
-    let!(:link) { resource.links.last }
+    let!(:link) { create(:link, linkable: resource) }
 
     context 'user is resource author' do
       before { login(users[0]) }

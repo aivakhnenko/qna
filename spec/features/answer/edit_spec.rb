@@ -8,7 +8,8 @@ feature 'User can edit his answer', %q{
 
   given!(:users) { create_list(:user, 2) }
   given!(:question) { create(:question, user: users[0]) }
-  given!(:answer) { create(:answer, question: question, user: users[0]) }
+  given!(:answer) { create(:answer, :with_file_attached, question: question, user: users[0]) }
+  given!(:link) { create(:link, linkable: answer) }
 
   describe 'Authenticated user' do
     describe 'edits his answer' do
