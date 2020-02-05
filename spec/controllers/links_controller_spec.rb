@@ -33,10 +33,10 @@ RSpec.describe LinksController, type: :controller do
         expect(response).to redirect_to question_path(resource)
       end
 
-      it 'responds with status forbidden for js request' do
+      it 'responds with status unauthorized for js request' do
         delete :destroy, params: { id: link }, format: :js
 
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :unauthorized
       end
     end
   end
