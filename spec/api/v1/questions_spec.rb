@@ -132,7 +132,7 @@ describe 'Questions API', type: :request do
           expect(response).to have_http_status :created
         end
 
-        %w[id title body created_at updated_at].each do |attr|
+        PUBLIC_FIELDS.each do |attr|
           it "returns public field #{attr}" do
             expect(question_response[attr]).to eq question.send(attr).as_json
           end
@@ -183,7 +183,7 @@ describe 'Questions API', type: :request do
             expect(response).to have_http_status :ok
           end
 
-          %w[id title body created_at updated_at].each do |attr|
+          PUBLIC_FIELDS.each do |attr|
             it "returns public field #{attr}" do
               expect(question_response[attr]).to eq question.reload.send(attr).as_json
             end
