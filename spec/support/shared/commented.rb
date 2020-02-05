@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 shared_examples 'commented' do
   let(:model) { described_class.controller_name.singularize }
 

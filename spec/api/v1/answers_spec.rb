@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Questions API', type: :request do
+describe 'Answers API', type: :request do
   PUBLIC_FIELDS = %w[id body question_id user_id created_at updated_at].freeze
 
   let(:token) { create(:access_token).token }
