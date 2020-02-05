@@ -1,34 +1,37 @@
 require 'rails_helper'
 
 describe 'Profiles API', type: :request do
-  let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
+  PUBLIC_FIELDS = %w[id email admin created_at updated_at].freeze
+  PRIVATE_FIELDS = %w[password password_confirmation].freeze
+
+  let(:user) { create(:user) }
+  let(:token) { create(:access_token, resource_owner_id: user.id).token }
+
   let(:public_fields) { %w[id email admin created_at updated_at] }
-  let(:private_fields) { %w[password password_confirmation] }
 
   describe 'GET /api/v1/profiles/me' do
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :get }
-      let(:api_path) { '/api/v1/profiles/me' }
-    end
+    let(:method) { :get }
+    let(:path) { '/api/v1/profiles/me' }
+
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
       let(:user) { create(:user) }
-      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
-      before { get '/api/v1/profiles/me', params: { access_token: access_token.token }, headers: headers }
+      before { do_request method, path, params: { access_token: token } }
 
       it 'returns 200 status' do
         expect(response).to be_successful
       end
 
-      it 'returns all public fields' do
-        public_fields.each do |attr|
+      PUBLIC_FIELDS.each do |attr|
+        it "returns public field #{attr}" do
           expect(json['user'][attr]).to eq user.send(attr).as_json
         end
       end
 
-      it 'does not return private fields' do
-        private_fields.each do |attr|
+      PRIVATE_FIELDS.each do |attr|
+        it "does not return private field #{attr}" do
           expect(json['user']).to_not have_key(attr)
         end
       end
@@ -36,34 +39,32 @@ describe 'Profiles API', type: :request do
   end
 
   describe 'GET /api/v1/profiles' do
-    it_behaves_like 'API Authorizable' do
-      let(:method) { :get }
-      let(:api_path) { '/api/v1/profiles' }
-    end
+    let(:method) { :get }
+    let(:path) { '/api/v1/profiles' }
+
+    it_behaves_like 'API Authorizable'
 
     context 'authorized' do
-      let(:user) { create(:user) }
       let!(:other_users) { create_list(:user, 3) }
-      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
-      before { get '/api/v1/profiles', params: { access_token: access_token.token }, headers: headers }
+      before { do_request method, path, params: { access_token: token } }
 
       it 'returns 200 status' do
         expect(response).to be_successful
       end
 
       it 'returns list of other users' do
-        expect(json['users'].size).to eq 3
+        expect(json['users'].count).to eq other_users.count
       end
 
-      it 'returns all public fields' do
-        public_fields.each do |attr|
+      PUBLIC_FIELDS.each do |attr|
+        it "returns public field #{attr}" do
           expect(json['users'].first[attr]).to eq other_users.first.send(attr).as_json
         end
       end
 
-      it 'does not return private fields' do
-        private_fields.each do |attr|
+      PRIVATE_FIELDS.each do |attr|
+        it "does not return private field #{attr}" do
           expect(json['users'].first).to_not have_key(attr)
         end
       end

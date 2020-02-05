@@ -158,10 +158,10 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to redirect_to question_path(question)
       end
 
-      it 'responds with status forbidden for js request' do
+      it 'responds with status unauthorized for js request' do
         patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
 
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :unauthorized
       end
     end
   end

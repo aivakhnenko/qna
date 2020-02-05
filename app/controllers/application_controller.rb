@@ -6,8 +6,8 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.html { redirect_to cancan_redirect_path(exception), alert: exception.message }
-      format.json { render :show, status: :created, location: @entry }
-      format.js { head :forbidden }
+      format.json { head :unauthorized }
+      format.js { head :unauthorized }
     end
   end
 
