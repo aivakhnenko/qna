@@ -15,7 +15,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
     if @answer.save
       render json: @answer, status: :created
     else
-      head :forbidden
+      head :unprocessable_entity
     end
   end
 
@@ -23,7 +23,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
     if @answer.update(answer_params)
       render json: @answer
     else
-      head :forbidden
+      head :unprocessable_entity
     end
   end
 
