@@ -148,8 +148,8 @@ describe 'Questions API', type: :request do
           expect { do_request method, path, params: { access_token: token, question: question_attributes } }.not_to change(Question, :count)
         end
 
-        it 'returns 403 status' do
-          expect(response).to have_http_status :forbidden
+        it 'returns 422 status' do
+          expect(response).to have_http_status :unprocessable_entity
         end
       end
     end
@@ -201,9 +201,9 @@ describe 'Questions API', type: :request do
             end
           end
 
-          it 'returns 403 status' do
+          it 'returns 422 status' do
             do_request method, path, params: { access_token: token, question: question_attributes }
-            expect(response).to have_http_status :forbidden
+            expect(response).to have_http_status :unprocessable_entity
           end
         end
       end
@@ -221,9 +221,9 @@ describe 'Questions API', type: :request do
           end
         end
 
-        it 'returns 401 status' do
+        it 'returns 403 status' do
           do_request method, path, params: { access_token: token, question: question_attributes }
-          expect(response).to have_http_status :unauthorized
+          expect(response).to have_http_status :forbidden
         end
       end
     end
@@ -259,9 +259,9 @@ describe 'Questions API', type: :request do
           expect { do_request method, path, params: { access_token: token, id: question } }.to_not change(Question, :count)
         end
 
-        it 'returns 401 status' do
+        it 'returns 403 status' do
           do_request method, path, params: { access_token: token, id: question }
-          expect(response).to have_http_status :unauthorized
+          expect(response).to have_http_status :forbidden
         end
       end
     end
