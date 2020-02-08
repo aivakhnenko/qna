@@ -11,6 +11,11 @@ p= question.body
   p Reward:
   p= question.reward.name
   p= image_tag url_for(question.reward.image)
+.subscribe
+  -if can?(:create, Subscription) && ! question.subscription(current_user)
+    p= link_to 'Subscribe', question_subscriptions_path(question), method: :post
+  -if can? :destroy, question.subscription(current_user)
+    p= link_to 'Unsubscribe', subscription_path(question.subscription(current_user)), method: :delete
 = render 'votes', resource: question
 = render 'comments', resource: question
 - if current_user&.author_of?(question)

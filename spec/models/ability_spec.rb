@@ -52,5 +52,9 @@ RSpec.describe Ability do
 
     it { should be_able_to :vote, create(:answer, user: other_user) }
     it { should_not be_able_to :vote, create(:answer, user: user) }
+
+    it { should be_able_to :create, Subscription }
+    it { should be_able_to :destroy, create(:subscription, user: user) }
+    it { should_not be_able_to :destroy, create(:subscription, user: other_user) }
   end
 end

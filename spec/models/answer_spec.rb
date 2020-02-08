@@ -17,6 +17,15 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
   it { should_not allow_value(nil).for(:best) }
 
+  describe 'notification' do
+    let(:answer) { build(:answer) }
+
+    it 'calls NewAnswerJob' do
+      expect(NewAnswerJob).to receive(:perform_later).with(answer)
+      answer.save!
+    end
+  end
+
   describe 'methods' do
     let(:users) { create_list(:user, 2) }
     let(:question) { create(:question, user: users[0]) }

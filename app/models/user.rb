@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_many :rewards, dependent: :nullify
   has_many :votes, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def author_of?(resource)
     resource.user_id == self.id

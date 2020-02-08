@@ -28,6 +28,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params.merge(user: current_user))
     if @question.save
+      @question.subscribe!(@question.user)
       redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new
