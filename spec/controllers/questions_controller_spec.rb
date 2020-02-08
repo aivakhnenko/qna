@@ -78,6 +78,10 @@ RSpec.describe QuestionsController, type: :controller do
         expect { post :create, params: { question: question_attributes } }.to change(Question, :count).by(1)
       end
 
+      it 'creates a subscription for author' do
+        expect { post :create, params: { question: question_attributes } }.to change(Subscription, :count).by(1)
+      end
+
       it 'saves question with attributes from params in the database' do
         expect(question_attributes.to_a - assigns(:question).attributes.symbolize_keys.to_a).to be_empty
       end
