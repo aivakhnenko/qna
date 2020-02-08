@@ -6,7 +6,7 @@ RSpec.describe Services::NewAnswerNotification do
   let!(:answer) { create(:answer, question: question) }
 
   it 'sends new answer notification to subscribed users' do
-    subscription.each { |s| expect(AnswerMailer).to receive(:new_answer).with(s.user).and_call_original }
+    subscription.each { |s| expect(AnswerMailer).to receive(:new_answer).with(s.user, answer).and_call_original }
     subject.send_notifications(answer)
   end
 end
