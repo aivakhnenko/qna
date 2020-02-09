@@ -41,5 +41,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :search, only: :show
+
   mount ActionCable.server => '/cable'
 end

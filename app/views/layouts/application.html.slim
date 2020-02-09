@@ -15,4 +15,5 @@ html
       p= link_to 'Sign in', new_user_session_path
     p class="notice" = notice 
     p class="alert"  = alert 
+    = render 'searches/form'
     = yield

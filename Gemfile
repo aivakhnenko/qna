@@ -87,6 +87,7 @@ group :test do
   gem 'shoulda-matchers', '~> 4.0.1'
   gem 'launchy', '~> 2.4.3'
   gem 'capybara-email'
+  gem 'database_cleaner-active_record'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,0 +1,5 @@
+.search_form
+  = form_with url: 'search', local: true, method: :get do |f|
+    = f.select :t, SearchesController::TYPES.keys, { selected: @t, include_blank: false }
+    = f.text_field :q, value: @q
+    = f.submit 'Search', name: nil
