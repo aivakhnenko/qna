@@ -56,6 +56,7 @@ gem 'sinatra', require: false
 gem 'whenever', require: false
 gem 'mysql2', '0.4.9'
 gem 'thinking-sphinx', '4.0.0'
+gem 'mini_racer'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger
@@ -75,7 +76,14 @@ group :development do
   # background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem "letter_opener"
+  gem 'letter_opener'
+
+  gem 'capistrano', require: false
+  # gem 'capistrano-rvm', require: false
+  gem 'rvm1-capistrano3', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-passenger', require: false
 end
 
 group :test do
