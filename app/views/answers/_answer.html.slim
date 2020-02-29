@@ -1,14 +1,15 @@
 - action_cable ||= false
 - if answer.persisted?
   div id="answer-#{answer.id}"
-    p= answer.body
-    - if answer.files.attached?
-      = render partial: 'attachments/attachment', collection: answer.files
-    - if answer.links.any?
-      .links-list
-        p Links:
-        ul
-          = render partial: 'links/link', collection: answer.links, locals: { action_cable: action_cable }
+    - cache [action_cable || current_user&.author_of?(answer), answer] do
+      p= answer.body
+      - if answer.files.attached?
+        = render partial: 'attachments/attachment', collection: answer.files
+      - if answer.links.any?
+        .links-list
+          p Links:
+          ul
+            = render partial: 'links/link', collection: answer.links, locals: { action_cable: action_cable }
     = render 'votes', resource: answer, action_cable: action_cable
     = render 'comments', resource: answer, action_cable: action_cable
     - if action_cable || current_user&.author_of?(@question)
