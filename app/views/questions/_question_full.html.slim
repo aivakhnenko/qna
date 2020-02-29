@@ -1,16 +1,17 @@
-h1= question.title
-p= question.body
-- if question.files.attached?
-  = render partial: 'attachments/attachment', collection: question.files
-- if question.links.any?
-  .links-list
-    p Links:
-    ul
-      = render question.links
-- if question.reward
-  p Reward:
-  p= question.reward.name
-  p= image_tag url_for(question.reward.image)
+- cache [current_user&.author_of?(question), question] do
+  h1= question.title
+  p= question.body
+  - if question.files.attached?
+    = render partial: 'attachments/attachment', collection: question.files
+  - if question.links.any?
+    .links-list
+      p Links:
+      ul
+        = render question.links
+  - if question.reward
+    p Reward:
+    p= question.reward.name
+    p= image_tag url_for(question.reward.image)
 .subscribe
   -if can?(:create, Subscription) && !question.subscription(current_user)
     p= link_to 'Subscribe', question_subscriptions_path(question), method: :post
