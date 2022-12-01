@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.2.1'
+gem 'rails', '~> 6.0.6'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -38,20 +38,20 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'slim-rails', '~> 3.2.0'
-gem 'devise', '~> 4.7.1'
+gem 'devise', '~> 4.8.1'
 gem 'jquery-rails', '~> 4.3.3'
 gem 'aws-sdk-s3', '~> 1'
 gem 'cocoon', '~> 1.2.14'
 gem 'file_validators', '~> 2.3.0'
-gem 'gon', '~> 6.3.2'
-gem 'omniauth', '~> 1.9.0'
-gem 'omniauth-github', '~> 1.3.0'
+gem 'gon', '~> 6.4.0'
+gem 'omniauth', '~> 2.1.0'
+gem 'omniauth-github', '~> 2.0.1'
 gem 'omniauth-facebook', '~> 5.0.0'
 gem 'cancancan'
 gem 'doorkeeper'
 gem 'active_model_serializers', '~> 0.10'
 gem 'oj'
-gem 'sidekiq', '5.2.8'
+gem 'sidekiq', '6.5.8'
 gem 'sinatra', require: false
 gem 'whenever', require: false
 gem 'mysql2', '0.4.9'
